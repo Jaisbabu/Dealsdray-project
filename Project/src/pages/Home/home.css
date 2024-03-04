@@ -1,0 +1,8 @@
+.home {
+  background-image: url("../../../images/img2.png"); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+  background-size: cover; /* Cover the entire element with the background image */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the background image from repeating */
+  height: 100vh; /* Set the height of the element to fill the viewport */
+  /* You can add additional styles as needed */
+}

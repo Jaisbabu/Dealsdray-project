@@ -1,0 +1,7 @@
+.dashbord {
+  width: 100vh;
+  min-height: 500px;
+}
+.dashbord h1 {
+  margin: auto;
+}

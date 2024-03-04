@@ -1,0 +1,9 @@
+.usercard {
+  margin: 5px;
+  background-color: aqua;
+  border: 2px solid black;
+  /* margin: 20px; */
+  padding: 20px;
+  display: flex;
+  justify-content: space-evenly;
+}
