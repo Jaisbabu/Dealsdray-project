@@ -49,7 +49,8 @@ app.get("/employee", async (req, res) => {
 
 app.get("/employee/:id", async (req, res) => {
   try {
-    const employees = await Employee.find();
+    const id = req.params.id;
+    const employees = await Employee.findById(id);
     res.status(200).json(employees[0]);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -89,7 +90,9 @@ app.post("/login", async (req, res) => {
 app.patch("/employee/:id", async (req, res) => {
   try {
     const id = req.params.id;
+    await Employee.fi;
     await Employee.findByIdAndUpdate(id, req.body);
+    await Employee.fi;
     res.status(200).json({ message: "Data updated" });
   } catch (e) {
     res.status(500).json({ error: e.message });
