@@ -4,11 +4,25 @@ import Employee from "./db/models/employeeSchema.js";
 import multer from "multer";
 import cors from "cors";
 import Login from "./db/models/loginSchema.js";
+import session from "express-session";
+import crypto from "crypto";
+const generateSecretKey = () => {
+  return crypto.randomBytes(64).toString("hex");
+};
+
+const secretKey = generateSecretKey();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.static("uploads"));
+app.use(
+  session({
+    secret: secretKey,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -97,6 +111,17 @@ app.patch("/employee/:id", async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
+});
+app.post("/logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      res.status(500).send("Logout failed");
+    } else {
+      res.clearCookie("connect.sid");
+      res.sendStatus(200);
+    }
+  });
 });
 
 app.listen(3000, (req, res) => {

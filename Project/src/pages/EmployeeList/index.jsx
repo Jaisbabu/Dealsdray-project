@@ -40,7 +40,7 @@ const EmployeeList = () => {
           <button>Create Employee</button>
           <input type="text" placeholder="Search" />
           <select>
-            <option value="">Search Filter</option>
+            <option value="">Search filter</option>
           </select>
         </div>
         <div className="table-container">
@@ -98,7 +98,6 @@ const EmployeeList = () => {
             </tbody>
           </table>
         </div>
-        <div className="pagination">{/* Add pagination controls here */}</div>
       </div>
     </div>
   );
