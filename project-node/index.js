@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
     cb(null, "uploads");
   },
   filename: (req, file, cb) => {
-    console.log(file);
+    // console.log(file);
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
@@ -69,7 +69,8 @@ app.get("/login/employee/:id", checkToken, async (req, res) => {
   try {
     const id = req.params.id;
     const employees = await Employee.findById(id);
-    res.status(200).json(employees[0]);
+    console.log(employees[0]);
+    res.status(200).json(employees);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -102,7 +103,7 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign({ role: "ADMIN", id: Login._id }, secret_key, {
       expiresIn: "7d",
     });
-    console.log(token);
+
     return res.status(200).json({ message: "Login Successfull", token: token });
   } catch (error) {
     console.error("Error:", error);
@@ -116,9 +117,7 @@ app.post("/login", async (req, res) => {
 app.patch("/login/employee/:id", checkToken, async (req, res) => {
   try {
     const id = req.params.id;
-    await Employee.fi;
     await Employee.findByIdAndUpdate(id, req.body);
-    await Employee.fi;
     res.status(200).json({ message: "Data updated" });
   } catch (e) {
     res.status(500).json({ error: e.message });
