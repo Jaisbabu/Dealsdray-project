@@ -31,7 +31,7 @@ const EmployeeList = () => {
     // navigate("/employee-list");
   };
   const onEdit = id => {
-    navigate(`/login/edit-employee/:${id}`);
+    navigate(`/login/edit-employee/${id}`);
     console.log(id);
   };
   return (

@@ -79,7 +79,7 @@ const EditEmployee = () => {
     await axios.patch(`http://localhost:3000/login/employee/${id}`, edit, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    navigate("/employee-list");
+    navigate("/login/employee-list");
   };
   console.log(edit);
   console.log(data);

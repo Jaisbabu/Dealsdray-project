@@ -3,6 +3,7 @@ import mongoose from "./db/DBconnection.js";
 import Employee from "./db/models/employeeSchema.js";
 import multer from "multer";
 import cors from "cors";
+import { ObjectId } from "mongoose";
 import jwt from "jsonwebtoken";
 import Login from "./db/models/loginSchema.js";
 
@@ -11,7 +12,7 @@ const secret_key = "slkvnorifjqwldmqlkwndokwievjmpwrlwfwvkem";
 const checkToken = (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    console.log(token);
+    // console.log(token);
     if (!token) {
       return res.status(403).json({ message: "You are not authorized" });
     }
@@ -68,6 +69,7 @@ app.get("/login/employee", checkToken, async (req, res) => {
 app.get("/login/employee/:id", checkToken, async (req, res) => {
   try {
     const id = req.params.id;
+    // console.log(id);
     const employees = await Employee.findById(id);
     console.log(employees[0]);
     res.status(200).json(employees);
