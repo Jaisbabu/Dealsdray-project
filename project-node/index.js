@@ -3,7 +3,6 @@ import mongoose from "./db/DBconnection.js";
 import Employee from "./db/models/employeeSchema.js";
 import multer from "multer";
 import cors from "cors";
-import { ObjectId } from "mongoose";
 import jwt from "jsonwebtoken";
 import Login from "./db/models/loginSchema.js";
 
@@ -71,7 +70,7 @@ app.get("/login/employee/:id", checkToken, async (req, res) => {
     const id = req.params.id;
     // console.log(id);
     const employees = await Employee.findById(id);
-    console.log(employees[0]);
+    // console.log(employees[0]);
     res.status(200).json(employees);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -99,8 +98,6 @@ app.post("/login", async (req, res) => {
     if (!isMatching) {
       return res.status(403).json({ message: "Invalid username or password" });
     }
-
-    // const secret_key = "slkvnorifjqwldmqlkwndokwievjmpwrlwfwvkem";
 
     const token = jwt.sign({ role: "ADMIN", id: Login._id }, secret_key, {
       expiresIn: "7d",

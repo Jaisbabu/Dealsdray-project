@@ -53,7 +53,7 @@ const CreateEmployee = () => {
     await axios.post("http://localhost:3000/login/employee", data, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    navigate("/login/dash-bord");
+    navigate("/login/dash-board");
   };
   console.log(data);
   return (

@@ -1,13 +1,4 @@
-import {
-  Input,
-  Select,
-  Button,
-  Radio,
-  Checkbox,
-  Upload,
-  Form,
-  message,
-} from "antd";
+import { Input, Select, Button, Radio, Checkbox, Upload, Form } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -81,8 +72,9 @@ const EditEmployee = () => {
     });
     navigate("/login/employee-list");
   };
-  console.log(edit);
-  console.log(data);
+  const onDelete = () => {};
+  // console.log(edit);
+  // console.log(data);
   return (
     <div className="editemployee">
       <NavBar text="Edit USER" />
@@ -138,7 +130,6 @@ const EditEmployee = () => {
               onChange={e => {
                 onChange(e, "gender");
               }}
-              // value={data.gender}
             >
               <Radio value="male">Male</Radio>
               <Radio value="female">Female</Radio>
@@ -151,7 +142,7 @@ const EditEmployee = () => {
                 <Checkbox
                   // value={data.course}
                   key={option}
-                  checked={data.course === option}
+                  checked={data.course[0] === option}
                   onChange={() => handleCheckboxChange(option)}
                 >
                   {option}
@@ -162,12 +153,25 @@ const EditEmployee = () => {
 
           <Form.Item label="Image">
             <Upload
-              value={data.image}
+              // value={data.image}
               action={"http://localhost:3000/image"}
               onChange={onUploadChange}
             >
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
+            <img
+              style={{ margin: "10px", width: "60px" }}
+              src={data.image}
+              alt=""
+            />
+
+            {/* <i
+              class="fa-solid fa-trash"
+              style={{ position: "absolute", left: "100px", bottom: "30px" }}
+              onClick={() => {
+                onDelete();
+              }}
+            ></i> */}
           </Form.Item>
 
           <Form.Item>

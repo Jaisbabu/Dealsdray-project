@@ -28,7 +28,6 @@ const EmployeeList = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     fetchData();
-    // navigate("/employee-list");
   };
   const onEdit = id => {
     navigate(`/login/edit-employee/${id}`);
@@ -41,7 +40,7 @@ const EmployeeList = () => {
       <div className="content">
         <div className="toolbar">
           <span>Total Count: {employees.length}</span>
-          <button>Create Employee</button>
+          {/* <button>Create Employee</button> */}
           <input type="text" placeholder="Search" />
           <select>
             <option value="">Search filter</option>

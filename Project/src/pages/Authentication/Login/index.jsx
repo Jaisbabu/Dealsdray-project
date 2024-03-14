@@ -20,12 +20,11 @@ const Login = () => {
     try {
       const response = await axios.post("http://localhost:3000/login", value);
       saveCreds(response.data.token);
-      navigate("/login/dash-bord");
+      navigate("/login/dash-board");
     } catch (e) {
       toast.error(e.response.data.message);
     }
   };
-  console.log(value);
 
   return (
     <div className="login">
