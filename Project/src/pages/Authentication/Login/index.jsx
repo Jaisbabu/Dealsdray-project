@@ -1,8 +1,10 @@
 import { Button, Form, Input, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import NavBar1 from "../../components/NavBar1/Navbar1";
+import NavBar1 from "../../../components/NavBar1/Navbar1.jsx";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 import { useState } from "react";
+import { saveCreds } from "../../../utils/index.js";
 import "./login.css";
 
 const Login = () => {
@@ -17,23 +19,18 @@ const Login = () => {
   const onBtnClick = async () => {
     try {
       const response = await axios.post("http://localhost:3000/login", value);
-      const { data } = response;
-      console.log(data);
-      if (data.success) {
-        console.log("Login successful!");
-        navigate("/dash-bord");
-      } else {
-        console.log(data.message);
-        message.error(data.message);
-      }
+      saveCreds(response.data.token);
+      navigate("/login/dash-bord");
     } catch (e) {
-      console.log({ error: e.message });
+      toast.error(e.response.data.message);
     }
   };
+  console.log(value);
 
   return (
     <div className="login">
       <NavBar1 text="LOG IN" />
+      <ToastContainer />
       <div className="login-card">
         <h1>LOGIN</h1>
         <Form name="login" initialValues={{ remember: true }}>

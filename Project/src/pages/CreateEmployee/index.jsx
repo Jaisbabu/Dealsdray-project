@@ -50,7 +50,9 @@ const CreateEmployee = () => {
     }
   };
   const onBtnClick = async () => {
-    await axios.post("http://localhost:3000/employee", data);
+    await axios.post("http://localhost:3000/login/employee", data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     navigate("/dash-bord");
   };
   console.log(data);

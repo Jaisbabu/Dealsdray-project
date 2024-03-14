@@ -34,7 +34,12 @@ const EditEmployee = () => {
   const fetchById = async () => {
     try {
       console.log(id);
-      const response = await axios.get(`http://localhost:3000/employee/${id}`);
+      const response = await axios.get(
+        `http://localhost:3000/login/employee/${id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setData({ ...data, ...response.data });
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -71,7 +76,9 @@ const EditEmployee = () => {
   };
 
   const onBtnClick = async id => {
-    await axios.patch(`http://localhost:3000/employee/${id}`, edit);
+    await axios.patch(`http://localhost:3000/login/employee/${id}`, edit, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     navigate("/employee-list");
   };
   console.log(edit);

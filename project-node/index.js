@@ -3,26 +3,30 @@ import mongoose from "./db/DBconnection.js";
 import Employee from "./db/models/employeeSchema.js";
 import multer from "multer";
 import cors from "cors";
+import jwt from "jsonwebtoken";
 import Login from "./db/models/loginSchema.js";
-import session from "express-session";
-import crypto from "crypto";
-const generateSecretKey = () => {
-  return crypto.randomBytes(64).toString("hex");
-};
 
-const secretKey = generateSecretKey();
+const secret_key = "slkvnorifjqwldmqlkwndokwievjmpwrlwfwvkem";
+
+const checkToken = (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    console.log(token);
+    if (!token) {
+      return res.status(403).json({ message: "You are not authorized" });
+    }
+    const ogToken = token.split(" ")[1];
+    const isValid = jwt.verify(ogToken, secret_key);
+    next();
+  } catch (e) {
+    return res.status(403).json({ message: "You are not authorized" });
+  }
+};
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.static("uploads"));
-app.use(
-  session({
-    secret: secretKey,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -43,7 +47,7 @@ app.post("/image", upload.single("file"), (req, res) => {
   }
 });
 
-app.post("/employee", async (req, res) => {
+app.post("/login/employee", checkToken, async (req, res) => {
   try {
     await Employee.create(req.body);
     res.status(201).json({ message: "Product added" });
@@ -52,7 +56,7 @@ app.post("/employee", async (req, res) => {
   }
 });
 
-app.get("/employee", async (req, res) => {
+app.get("/login/employee", checkToken, async (req, res) => {
   try {
     const employees = await Employee.find();
     res.status(200).json(employees);
@@ -61,7 +65,7 @@ app.get("/employee", async (req, res) => {
   }
 });
 
-app.get("/employee/:id", async (req, res) => {
+app.get("/login/employee/:id", checkToken, async (req, res) => {
   try {
     const id = req.params.id;
     const employees = await Employee.findById(id);
@@ -71,7 +75,7 @@ app.get("/employee/:id", async (req, res) => {
   }
 });
 
-app.delete("/employee/:id", async (req, res) => {
+app.delete("/login/employee/:id", checkToken, async (req, res) => {
   try {
     const id = req.params.id;
     await Employee.findByIdAndDelete(id);
@@ -83,15 +87,23 @@ app.delete("/employee/:id", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await Login.findOne({ username });
-    console.log(user);
-    if (!user || user.password !== password) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid username or password" });
+    const body = { ...req.body };
+    const user = await Login.findOne({ username: body.username });
+    if (!user) {
+      return res.status(403).json({ message: "Invalid username or password" });
     }
-    res.status(200).json({ success: true, message: "Login successful" });
+    const isMatching = await Login.findOne({ password: body.password });
+    if (!isMatching) {
+      return res.status(403).json({ message: "Invalid username or password" });
+    }
+
+    // const secret_key = "slkvnorifjqwldmqlkwndokwievjmpwrlwfwvkem";
+
+    const token = jwt.sign({ role: "ADMIN", id: Login._id }, secret_key, {
+      expiresIn: "7d",
+    });
+    console.log(token);
+    return res.status(200).json({ message: "Login Successfull", token: token });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({
@@ -101,7 +113,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.patch("/employee/:id", async (req, res) => {
+app.patch("/login/employee/:id", checkToken, async (req, res) => {
   try {
     const id = req.params.id;
     await Employee.fi;
@@ -112,16 +124,13 @@ app.patch("/employee/:id", async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
 app.post("/logout", (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      console.error("Error destroying session:", err);
-      res.status(500).send("Logout failed");
-    } else {
-      res.clearCookie("connect.sid");
-      res.sendStatus(200);
-    }
-  });
+  try {
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.listen(3000, (req, res) => {

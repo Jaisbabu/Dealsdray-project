@@ -10,7 +10,9 @@ const EmployeeList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/employee");
+      const response = await axios.get("http://localhost:3000/login/employee", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       setEmployees(response.data);
       console.log(response.data);
     } catch (error) {
@@ -22,7 +24,9 @@ const EmployeeList = () => {
   }, []);
 
   const onDelete = async id => {
-    await axios.delete(`http://localhost:3000/employee/${id}`);
+    await axios.delete(`http://localhost:3000/login/employee/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     fetchData();
     // navigate("/employee-list");
   };
